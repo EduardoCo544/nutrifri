@@ -60,7 +60,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
 
         {post.coverUrl && (
           <div className="relative mt-10 aspect-[16/9] overflow-hidden rounded-card">
-            <PostCover src={post.coverUrl} alt={post.coverAlt || post.title} preload sizes="(min-width: 1024px) 860px, 100vw" />
+            <PostCover src={post.coverUrl} alt={post.coverAlt || post.title} eager sizes="(min-width: 1024px) 860px, 100vw" />
           </div>
         )}
 

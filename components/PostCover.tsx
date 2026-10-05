@@ -5,7 +5,8 @@ import { cloudinaryLoader } from "@/lib/cloudinary";
 
 // Componente de cliente: next/image recibe aquí la función loader, que no puede
 // pasarse desde un componente de servidor.
-export function PostCover({ src, alt, sizes, preload }: { src: string; alt: string; sizes: string; preload?: boolean }) {
+// `eager`: solo para la imagen principal visible al cargar (la portada del artículo).
+export function PostCover({ src, alt, sizes, eager }: { src: string; alt: string; sizes: string; eager?: boolean }) {
   if (!src) {
     return <div className="absolute inset-0 bg-linear-to-br from-orange-soft via-pink-soft to-lime-soft" />;
   }
@@ -16,7 +17,8 @@ export function PostCover({ src, alt, sizes, preload }: { src: string; alt: stri
       alt={alt}
       fill
       sizes={sizes}
-      preload={preload}
+      loading={eager ? "eager" : "lazy"}
+      fetchPriority={eager ? "high" : "auto"}
       loader={isCloudinary ? cloudinaryLoader : undefined}
       unoptimized={!isCloudinary}
       className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"

@@ -16,7 +16,6 @@ export function PostCard({ post, featured = false }: { post: Post; featured?: bo
         <PostCover
           src={post.coverUrl}
           alt={post.coverAlt || post.title}
-          preload={featured}
           sizes={featured ? "(min-width: 768px) 60vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"}
         />
       </div>
