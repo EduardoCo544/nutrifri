@@ -1,4 +1,4 @@
-// Lecturas de Firestore desde el servidor vía REST: el resultado queda en la caché de Next
+// Lecturas de Firestore desde el servidor vía REST: el resultado queda en la caché de Next (5 min)
 // con la etiqueta "posts" y se invalida al publicar desde el panel (ver app/actions.ts).
 import type { Post } from "./posts";
 
@@ -72,7 +72,7 @@ async function queryPosts(filters: Filter[]): Promise<Post[]> {
       },
     }),
     cache: "force-cache",
-    next: { tags: [POSTS_TAG], revalidate: 3600 },
+    next: { tags: [POSTS_TAG], revalidate: 300 },
   });
 
   if (!res.ok) {

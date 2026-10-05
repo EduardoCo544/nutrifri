@@ -1,27 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Clock } from "lucide-react";
-import { cloudinaryLoader } from "@/lib/cloudinary";
 import { formatDate, type Post } from "@/lib/posts";
 import { CategoryPill } from "./CategoryPill";
-
-export function PostCover({ post, sizes, preload }: { post: Post; sizes: string; preload?: boolean }) {
-  if (!post.coverUrl) {
-    return <div className="absolute inset-0 bg-linear-to-br from-orange-soft via-pink-soft to-lime-soft" />;
-  }
-  return (
-    <Image
-      src={post.coverUrl}
-      alt={post.coverAlt || post.title}
-      fill
-      sizes={sizes}
-      preload={preload}
-      loader={post.coverUrl.includes("res.cloudinary.com") ? cloudinaryLoader : undefined}
-      unoptimized={!post.coverUrl.includes("res.cloudinary.com")}
-      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-    />
-  );
-}
+import { PostCover } from "./PostCover";
 
 export function PostCard({ post, featured = false }: { post: Post; featured?: boolean }) {
   return (
@@ -33,7 +14,8 @@ export function PostCard({ post, featured = false }: { post: Post; featured?: bo
     >
       <div className={`relative overflow-hidden ${featured ? "aspect-[16/10] md:aspect-auto md:w-3/5" : "aspect-[16/10]"}`}>
         <PostCover
-          post={post}
+          src={post.coverUrl}
+          alt={post.coverAlt || post.title}
           preload={featured}
           sizes={featured ? "(min-width: 768px) 60vw, 100vw" : "(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"}
         />

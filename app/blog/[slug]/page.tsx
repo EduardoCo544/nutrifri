@@ -8,7 +8,7 @@ import { sanitizePostHtml } from "@/lib/sanitize";
 import { site } from "@/lib/site";
 import { cld } from "@/lib/cloudinary";
 import { CategoryPill } from "@/components/CategoryPill";
-import { PostCover } from "@/components/PostCard";
+import { PostCover } from "@/components/PostCover";
 import { PostComments } from "@/components/comments/PostComments";
 import { Avatar } from "@/components/Avatar";
 
@@ -60,7 +60,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
 
         {post.coverUrl && (
           <div className="relative mt-10 aspect-[16/9] overflow-hidden rounded-card">
-            <PostCover post={post} preload sizes="(min-width: 1024px) 860px, 100vw" />
+            <PostCover src={post.coverUrl} alt={post.coverAlt || post.title} preload sizes="(min-width: 1024px) 860px, 100vw" />
           </div>
         )}
 
