@@ -1,8 +1,8 @@
 "use client";
 
 import { getApp, getApps, initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth, GoogleAuthProvider, type Auth } from "firebase/auth";
+import { getFirestore, type Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,7 +14,11 @@ const firebaseConfig = {
 };
 
 export const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+
+// Auth y Firestore solo se usan en el navegador (efectos y eventos). En el servidor, durante
+// el prerender, no se inicializan: getAuth falla si la config no está disponible en el build.
+const isBrowser = typeof window !== "undefined";
+export const auth = isBrowser ? getAuth(app) : (null as unknown as Auth);
+export const db = isBrowser ? getFirestore(app) : (null as unknown as Firestore);
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });
