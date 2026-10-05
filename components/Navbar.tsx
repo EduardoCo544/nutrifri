@@ -12,7 +12,7 @@ import { Logo } from "./Logo";
 const links = [
   { href: "/", label: "Inicio" },
   { href: "/blog", label: "Blog" },
-  { href: "/#sobre-mi", label: "Sobre mí" },
+  { href: "/sobre-mi", label: "Sobre mí" },
 ];
 
 export function Navbar() {

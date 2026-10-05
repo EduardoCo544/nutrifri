@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronRight, MessageCircleQuestion, Sparkles } from "lucide-react";
 import { getHomeSettings, getPublishedPosts } from "@/lib/data";
 import { defaultAbout, defaultHero } from "@/lib/home-defaults";
-import { site } from "@/lib/site";
+import { about, site } from "@/lib/site";
 import { PostCard } from "@/components/PostCard";
 import { HomeHighlights } from "@/components/HomeHighlights";
 import { InstagramIcon } from "@/components/icons";
@@ -51,7 +51,7 @@ export default async function Home() {
           >
             Leer el blog
           </Link>
-          <Link href="#sobre-mi" className="group flex items-center text-[17px] text-orange-ink">
+          <Link href="/sobre-mi" className="group flex items-center text-[17px] text-orange-ink">
             Conóceme <ChevronRight className="size-4 transition group-hover:translate-x-0.5" />
           </Link>
         </div>
@@ -126,19 +126,25 @@ export default async function Home() {
           <div className="px-8 pb-12 md:px-14 md:py-16">
             <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-orange">¿Quién soy?</p>
             <h2 className="mt-3 font-display text-[34px] font-semibold leading-tight tracking-tight md:text-[44px]">
-              Bienvenido a tu lugar seguro para mejorar tus hábitos.
+              Hola, soy {site.authorName}.
             </h2>
+            <p className="mt-2 text-[15px] font-medium text-faint">{site.authorDegree}</p>
             <p className="mt-5 text-[17px] leading-relaxed text-muted">
-              Soy {site.authorTitle.toLowerCase()} y mi enfoque es simple: comer bien no debería sentirse como un
-              castigo. Aquí vas a encontrar información clara, sin mitos y sin culpas.
+              {about.intro} Con un enfoque clínico, lejos de trabajar en tu aspecto físico, vamos a cuidar tu cuerpo
+              desde el interior.
             </p>
-            <p className="mt-4 font-hand text-[28px] text-pink-ink">Spoiler: soy enemiga de las restricciones.</p>
+            <p className="mt-4 font-hand text-[28px] text-pink-ink">{about.spoiler}</p>
 
-            <div className="mt-8 flex items-start gap-3 rounded-2xl bg-white p-5 shadow-soft">
-              <MessageCircleQuestion className="mt-0.5 size-6 shrink-0 text-lavender-ink" />
-              <p className="text-[15px] leading-relaxed text-muted">
-                <span className="font-semibold text-ink">¿Tienes dudas?</span> Cada artículo tiene un panel de
-                preguntas al costado. Yo misma te respondo.
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+              <Link
+                href="/sobre-mi"
+                className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-2.5 text-[15px] font-medium text-white transition hover:bg-black"
+              >
+                Conocer más <ArrowRight className="size-4" />
+              </Link>
+              <p className="flex items-center gap-2 text-[14px] text-muted">
+                <MessageCircleQuestion className="size-5 shrink-0 text-lavender-ink" />
+                Te respondo en cada artículo.
               </p>
             </div>
           </div>
