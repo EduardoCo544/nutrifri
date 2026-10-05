@@ -3,6 +3,7 @@
 import { createHash } from "node:crypto";
 import { updateTag } from "next/cache";
 import { FIRESTORE_URL, POSTS_TAG } from "@/lib/data";
+import { HOME_TAG } from "@/lib/home";
 
 // Comprueba que el token de Firebase sea de una admin. No hace falta el Admin SDK:
 // Firestore valida la firma del token y las reglas solo dejan leer admins/{email}
@@ -28,6 +29,12 @@ async function assertAdmin(idToken: string) {
 export async function refreshPosts(idToken: string) {
   await assertAdmin(idToken);
   updateTag(POSTS_TAG);
+}
+
+// Se llama después de guardar las imágenes del inicio.
+export async function refreshHome(idToken: string) {
+  await assertAdmin(idToken);
+  updateTag(HOME_TAG);
 }
 
 // Firma una subida a Cloudinary. El API secret nunca sale del servidor.

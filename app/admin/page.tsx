@@ -8,6 +8,7 @@ import { auth, db } from "@/lib/firebase";
 import { cld } from "@/lib/cloudinary";
 import { refreshPosts } from "@/app/actions";
 import { CategoryPill } from "@/components/CategoryPill";
+import { AdminTabs } from "@/components/admin/AdminTabs";
 
 type Row = {
   id: string;
@@ -57,11 +58,9 @@ export default function AdminDashboard() {
 
   return (
     <div className="mx-auto max-w-5xl px-5 pt-12">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-orange">Panel</p>
-          <h1 className="mt-1 font-display text-[40px] font-semibold tracking-tight">Publicaciones</h1>
-        </div>
+      <AdminTabs />
+      <div className="mt-8 flex flex-wrap items-end justify-between gap-4">
+        <h1 className="font-display text-[40px] font-semibold tracking-tight">Publicaciones</h1>
         <Link
           href="/admin/posts/new"
           className="flex items-center gap-1.5 rounded-full bg-orange px-5 py-2.5 text-[15px] font-medium text-white shadow-[0_8px_24px_rgb(255_106_19/0.3)] transition hover:bg-[#f25e08]"

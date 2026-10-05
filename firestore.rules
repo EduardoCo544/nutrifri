@@ -32,6 +32,12 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Ajustes del sitio editables desde el panel (por ejemplo, las imágenes del inicio).
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     match /posts/{postId} {
       allow read: if resource.data.status == 'published' || isAdmin();
       allow create, update: if isAdmin() && validPost(request.resource.data);

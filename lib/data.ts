@@ -1,6 +1,7 @@
 // Lecturas de Firestore desde el servidor vía REST: el resultado queda en la caché de Next (5 min)
 // con la etiqueta "posts" y se invalida al publicar desde el panel (ver app/actions.ts).
 import type { Post } from "./posts";
+import { HOME_TAG, defaultHomeSettings, normalizeHomeSettings, type HomeSettings } from "./home";
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
@@ -97,4 +98,20 @@ export async function getPostBySlug(slug: string) {
     { field: "slug", value: slug },
   ]);
   return posts[0] ?? null;
+}
+
+// Imágenes editables del inicio. Si el documento no existe se usan las fotos originales.
+export async function getHomeSettings(): Promise<HomeSettings> {
+  if (!PROJECT_ID || !API_KEY) return defaultHomeSettings;
+
+  const res = await fetch(`${FIRESTORE_URL}/settings/home?key=${API_KEY}`, {
+    cache: "force-cache",
+    next: { tags: [HOME_TAG], revalidate: 300 },
+  });
+  if (!res.ok) {
+    if (res.status !== 404) console.error("No se pudo leer settings/home:", res.status);
+    return defaultHomeSettings;
+  }
+  const doc = (await res.json()) as { fields?: Record<string, FirestoreValue> };
+  return normalizeHomeSettings(decodeFields(doc.fields ?? {}));
 }

@@ -1,19 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, MessageCircleQuestion, Sparkles } from "lucide-react";
-import { getPublishedPosts } from "@/lib/data";
+import { getHomeSettings, getPublishedPosts } from "@/lib/data";
+import { defaultAbout, defaultHero } from "@/lib/home-defaults";
 import { site } from "@/lib/site";
 import { PostCard } from "@/components/PostCard";
 import { HomeHighlights } from "@/components/HomeHighlights";
 import { InstagramIcon } from "@/components/icons";
-import fresas from "@/public/images/fresas.jpg";
-import bowl from "@/public/images/bowl.jpg";
-import verdes from "@/public/images/verdes.jpg";
-import desayuno from "@/public/images/desayuno.jpg";
+import { HomePhoto } from "@/components/HomePhoto";
 import plato from "@/public/images/plato.jpg";
 
 export default async function Home() {
-  const posts = await getPublishedPosts();
+  const [posts, home] = await Promise.all([getPublishedPosts(), getHomeSettings()]);
   // Recuadros del inicio: primero los destacados, luego se completan con los más recientes.
   const highlights = [...posts.filter((p) => p.featured), ...posts.filter((p) => !p.featured)].slice(0, 3);
   // "Lo más reciente" no repite lo que ya aparece arriba.
@@ -64,13 +62,13 @@ export default async function Home() {
           style={{ animationDelay: "320ms" }}
         >
           <div className="relative col-span-2 hidden aspect-[3/4] translate-y-10 overflow-hidden rounded-card md:block">
-            <Image src={verdes} alt="Verduras de hoja verde acomodadas sobre fondo verde claro" fill sizes="33vw" placeholder="blur" className="object-cover" />
+            <HomePhoto custom={home.hero[0]} fallback={defaultHero[0]} sizes="33vw" />
           </div>
           <div className="relative col-span-6 aspect-[4/3] overflow-hidden rounded-card shadow-lift md:col-span-2 md:aspect-[3/4]">
-            <Image src={fresas} alt="Manos sosteniendo fresas frescas" fill sizes="(min-width: 768px) 33vw, 100vw" placeholder="blur" preload className="object-cover" />
+            <HomePhoto custom={home.hero[1]} fallback={defaultHero[1]} sizes="(min-width: 768px) 33vw, 100vw" eager />
           </div>
           <div className="relative col-span-2 hidden aspect-[3/4] translate-y-10 overflow-hidden rounded-card md:block">
-            <Image src={bowl} alt="Bowl de ensalada con salmón, huevo y verduras" fill sizes="33vw" placeholder="blur" className="object-cover" />
+            <HomePhoto custom={home.hero[2]} fallback={defaultHero[2]} sizes="33vw" />
           </div>
         </div>
       </section>
@@ -123,7 +121,7 @@ export default async function Home() {
       <section id="sobre-mi" className="mx-auto mt-28 max-w-6xl scroll-mt-20 px-5 md:mt-36">
         <div className="grid items-center gap-10 overflow-hidden rounded-card bg-canvas md:grid-cols-2 md:gap-0">
           <div className="relative aspect-[4/3] md:aspect-auto md:h-full md:min-h-[520px]">
-            <Image src={desayuno} alt="Desayuno saludable con huevo, aguacate y verduras" fill sizes="(min-width: 768px) 50vw, 100vw" placeholder="blur" className="object-cover" />
+            <HomePhoto custom={home.about} fallback={defaultAbout} sizes="(min-width: 768px) 50vw, 100vw" />
           </div>
           <div className="px-8 pb-12 md:px-14 md:py-16">
             <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-orange">¿Quién soy?</p>
