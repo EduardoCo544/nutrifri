@@ -44,6 +44,7 @@ function toPost(doc: { name: string; fields?: Record<string, FirestoreValue> }):
     coverAlt: f.coverAlt ?? "",
     contentHtml: f.contentHtml ?? "",
     status: f.status ?? "draft",
+    featured: f.featured ?? false,
     authorName: f.authorName ?? "",
     authorPhoto: f.authorPhoto ?? "",
     readingMinutes: f.readingMinutes ?? 1,

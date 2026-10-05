@@ -25,6 +25,7 @@ export default function EditPostPage({ params }: PageProps<"/admin/posts/[id]">)
         coverAlt: d.coverAlt ?? "",
         contentHtml: d.contentHtml ?? "",
         status: d.status === "published" ? "published" : "draft",
+        featured: Boolean(d.featured),
         hasPublishedAt: Boolean(d.publishedAt),
       });
     });

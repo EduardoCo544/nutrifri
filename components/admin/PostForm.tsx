@@ -32,6 +32,7 @@ export type PostDraft = {
   coverAlt: string;
   contentHtml: string;
   status: PostStatus;
+  featured: boolean;
   hasPublishedAt: boolean;
 };
 
@@ -44,6 +45,7 @@ export const emptyDraft: PostDraft = {
   coverAlt: "",
   contentHtml: "",
   status: "draft",
+  featured: false,
   hasPublishedAt: false,
 };
 
@@ -103,7 +105,7 @@ export function PostForm({ postId, initial }: { postId?: string; initial: PostDr
       }
 
       const ref = postId ? doc(db, "posts", postId) : doc(collection(db, "posts"));
-      const data: Record<string, string | number | FieldValue> = {
+      const data: Record<string, string | number | boolean | FieldValue> = {
         title: draft.title.trim(),
         slug,
         excerpt: draft.excerpt.trim(),
@@ -112,6 +114,7 @@ export function PostForm({ postId, initial }: { postId?: string; initial: PostDr
         coverAlt: draft.coverAlt.trim(),
         contentHtml: draft.contentHtml,
         status,
+        featured: draft.featured,
         readingMinutes: readingMinutes(draft.contentHtml),
         authorName: user?.displayName ?? "",
         authorPhoto: user?.photoURL ?? "",
@@ -284,6 +287,20 @@ export function PostForm({ postId, initial }: { postId?: string; initial: PostDr
                 ))}
               </select>
             </Field>
+            <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-white p-3 ring-1 ring-black/[0.06]">
+              <input
+                type="checkbox"
+                checked={draft.featured}
+                onChange={(e) => update({ featured: e.target.checked })}
+                className="mt-0.5 size-4 accent-[#ff6a13]"
+              />
+              <span>
+                <span className="block text-[14px] font-semibold">Destacar en el inicio</span>
+                <span className="block text-[12px] leading-snug text-faint">
+                  Aparece en los recuadros grandes de la página principal.
+                </span>
+              </span>
+            </label>
             <Field label="URL" hint={`/blog/${draft.slug || "…"}`}>
               <input
                 value={draft.slug}

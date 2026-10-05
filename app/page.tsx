@@ -4,18 +4,20 @@ import { ArrowRight, ChevronRight, MessageCircleQuestion, Sparkles } from "lucid
 import { getPublishedPosts } from "@/lib/data";
 import { site } from "@/lib/site";
 import { PostCard } from "@/components/PostCard";
+import { HomeHighlights } from "@/components/HomeHighlights";
 import { InstagramIcon } from "@/components/icons";
 import fresas from "@/public/images/fresas.jpg";
 import bowl from "@/public/images/bowl.jpg";
 import verdes from "@/public/images/verdes.jpg";
-import buddha from "@/public/images/buddha-bowl.jpg";
-import frutas from "@/public/images/frutas.jpg";
 import desayuno from "@/public/images/desayuno.jpg";
 import plato from "@/public/images/plato.jpg";
 
 export default async function Home() {
   const posts = await getPublishedPosts();
-  const [featured, ...rest] = posts;
+  // Recuadros del inicio: primero los destacados, luego se completan con los más recientes.
+  const highlights = [...posts.filter((p) => p.featured), ...posts.filter((p) => !p.featured)].slice(0, 3);
+  // "Lo más reciente" no repite lo que ya aparece arriba.
+  const [latest, ...rest] = posts.filter((p) => !highlights.includes(p));
 
   return (
     <>
@@ -79,52 +81,24 @@ export default async function Home() {
           Nada de restricciones. <span className="text-faint">Solo hábitos que sí puedes sostener.</span>
         </h2>
 
-        <div className="mt-12 grid gap-5 md:grid-cols-3 md:grid-rows-2">
-          <div className="relative min-h-[340px] overflow-hidden rounded-card md:col-span-2 md:row-span-2 md:min-h-[560px]">
-            <Image src={buddha} alt="Bowl con aguacate, garbanzos, jitomate y camote" fill sizes="(min-width: 768px) 66vw, 100vw" placeholder="blur" className="object-cover" />
-            <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-8 text-white md:p-10">
-              <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-lime">Hábitos</p>
-              <h3 className="mt-2 max-w-md font-display text-[28px] font-semibold leading-tight tracking-tight md:text-[38px]">
-                Pequeñas acciones que se vuelven grandes hábitos.
-              </h3>
-            </div>
-          </div>
-
-          <div className="flex min-h-[260px] flex-col justify-between rounded-card bg-lime p-8">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-forest/70">Te lo explico</p>
-            <div>
-              <h3 className="font-display text-[30px] font-bold leading-tight tracking-tight text-forest">¿Macros?</h3>
-              <p className="mt-2 text-[16px] leading-relaxed text-forest/80">
-                Qué son, para qué sirven y por qué no tienes que contarlos para comer bien.
-              </p>
-            </div>
-          </div>
-
-          <div className="relative min-h-[260px] overflow-hidden rounded-card bg-pink-soft">
-            <Image src={frutas} alt="Frutas tropicales de temporada" fill sizes="(min-width: 768px) 33vw, 100vw" placeholder="blur" className="object-cover opacity-90" />
-            <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-white/80 p-5 backdrop-blur-md">
-              <p className="font-hand text-[26px] leading-none text-pink-ink">Frutas y verduras del mes</p>
-              <p className="mt-1 text-[14px] text-muted">Conoce qué nos aporta cada una.</p>
-            </div>
-          </div>
-        </div>
+        <HomeHighlights posts={highlights} />
       </section>
 
-      {/* Últimos posts */}
-      <section className="mx-auto mt-28 max-w-6xl px-5 md:mt-36">
-        <div className="flex items-end justify-between gap-4">
-          <h2 className="font-display text-[36px] font-semibold tracking-tight md:text-[48px]">Lo más reciente</h2>
-          {posts.length > 0 && (
-            <Link href="/blog" className="group mb-2 flex shrink-0 items-center text-[17px] text-orange-ink">
-              Ver todo <ChevronRight className="size-4 transition group-hover:translate-x-0.5" />
-            </Link>
-          )}
+      {/* Últimos posts (se oculta si todos ya están en los recuadros de arriba) */}
+      {(latest || posts.length === 0) && (
+        <section className="mx-auto mt-28 max-w-6xl px-5 md:mt-36">
+          <div className="flex items-end justify-between gap-4">
+            <h2 className="font-display text-[36px] font-semibold tracking-tight md:text-[48px]">Lo más reciente</h2>
+            {posts.length > 0 && (
+              <Link href="/blog" className="group mb-2 flex shrink-0 items-center text-[17px] text-orange-ink">
+                Ver todo <ChevronRight className="size-4 transition group-hover:translate-x-0.5" />
+              </Link>
+      )}
         </div>
 
-        {featured ? (
+        {latest ? (
           <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <PostCard post={featured} featured />
+            <PostCard post={latest} featured />
             {rest.slice(0, 6).map((p) => (
               <PostCard key={p.id} post={p} />
             ))}
@@ -143,6 +117,7 @@ export default async function Home() {
           </div>
         )}
       </section>
+      )}
 
       {/* Sobre mí */}
       <section id="sobre-mi" className="mx-auto mt-28 max-w-6xl scroll-mt-20 px-5 md:mt-36">

@@ -12,6 +12,7 @@ export type Post = {
   coverAlt: string;
   contentHtml: string;
   status: PostStatus;
+  featured: boolean;
   authorName: string;
   authorPhoto: string;
   readingMinutes: number;
