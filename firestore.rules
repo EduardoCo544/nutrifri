@@ -1,0 +1,62 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function email() {
+      return request.auth.token.email.lower();
+    }
+
+    // Una admin es una cuenta de Google verificada cuyo correo existe en /admins.
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && exists(/databases/$(database)/documents/admins/$(email()));
+    }
+
+    function validPost(d) {
+      return d.title is string && d.title.size() > 0 && d.title.size() <= 200
+        && d.slug is string && d.slug.matches('^[a-z0-9-]{1,80}$')
+        && d.status in ['draft', 'published']
+        && d.contentHtml is string && d.contentHtml.size() < 900000
+        && d.excerpt is string && d.excerpt.size() <= 300;
+    }
+
+    // Las admins se dan de alta a mano en la consola (ID del documento = correo en minúsculas).
+    match /admins/{adminEmail} {
+      allow read: if signedIn() && email() == adminEmail;
+      allow write: if false;
+    }
+
+    match /posts/{postId} {
+      allow read: if resource.data.status == 'published' || isAdmin();
+      allow create, update: if isAdmin() && validPost(request.resource.data);
+      allow delete: if isAdmin();
+
+      match /comments/{commentId} {
+        allow read: if true;
+
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly(
+               ['text', 'kind', 'authorUid', 'authorName', 'authorPhoto', 'isAdmin', 'parentId', 'createdAt'])
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 2000
+          && request.resource.data.kind in ['question', 'comment']
+          && request.resource.data.authorName is string && request.resource.data.authorName.size() <= 100
+          && request.resource.data.authorPhoto is string && request.resource.data.authorPhoto.size() <= 500
+          && request.resource.data.isAdmin == isAdmin()
+          && (request.resource.data.parentId == null || request.resource.data.parentId is string)
+          && request.resource.data.createdAt == request.time;
+
+        allow update: if false;
+        allow delete: if isAdmin() || (signedIn() && resource.data.authorUid == request.auth.uid);
+      }
+    }
+  }
+}
