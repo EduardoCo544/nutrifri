@@ -6,7 +6,8 @@ import { useState } from "react";
 import { LayoutDashboard, Menu, X } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { site } from "@/lib/site";
-import { InstagramIcon, LogoMark } from "./icons";
+import { InstagramIcon } from "./icons";
+import { Logo } from "./Logo";
 
 const links = [
   { href: "/", label: "Inicio" },
@@ -24,9 +25,8 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-black/[0.06] bg-white/75 backdrop-blur-xl backdrop-saturate-150">
       <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5">
-        <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <LogoMark className="size-7" />
-          <span className="font-display text-[19px] font-semibold tracking-tight">{site.name}</span>
+        <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
+          <Logo className="h-[22px] w-auto" />
         </Link>
 
         <div className="hidden items-center gap-8 text-[13px] md:flex">

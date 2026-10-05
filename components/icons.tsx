@@ -11,23 +11,6 @@ export function InstagramIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-// Marca: una fresa sencilla con la hoja en verde lima.
-export function LogoMark(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 32 32" aria-hidden {...props}>
-      <path d="M16 9c6.5 0 10 3.6 10 8.3C26 23.5 20.4 29 16 29S6 23.5 6 17.3C6 12.6 9.5 9 16 9Z" fill="#ff6a13" />
-      <path d="M16 10.5c-2.6-3.4-6.4-4-8.6-3 2 .4 3.3 1.7 4.2 3.4M16 10.5c2.6-3.4 6.4-4 8.6-3-2 .4-3.3 1.7-4.2 3.4M16 10.5V4" stroke="#8bb800" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-      <g fill="#ffe9da">
-        <circle cx="12" cy="16" r="1" />
-        <circle cx="20" cy="16" r="1" />
-        <circle cx="16" cy="20" r="1" />
-        <circle cx="11.5" cy="22" r="1" />
-        <circle cx="20.5" cy="22" r="1" />
-      </g>
-    </svg>
-  );
-}
-
 export function GoogleG() {
   return (
     <span className="flex size-5 items-center justify-center rounded-full bg-white">
